@@ -540,7 +540,7 @@ EasyStar.js = function() {
         var directionFromParent = 'NONE';
         var turnPenaltyCost = 0;
         if (parent!==null) {
-            direction = calculateDirection(x - parent.x, y - parent.y)
+            directionFromParent = calculateDirection(x - parent.x, y - parent.y)
             if (parent.directionFromParent !== directionFromParent) {
                 turnPenaltyCost = turnPenalty;
             }
