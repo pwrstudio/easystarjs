@@ -34,6 +34,8 @@ EasyStar.js = function() {
     var iterationsPerCalculation = Number.MAX_VALUE;
     var acceptableTiles;
     var diagonalsEnabled = false;
+    var turnPenalty = 0;
+    var heuristicsFactor = 1;
 
     /**
     * Sets the collision grid that EasyStar uses.
@@ -223,6 +225,23 @@ EasyStar.js = function() {
     **/
     this.stopAvoidingAllAdditionalPoints = function() {
         pointsToAvoid = {};
+    };
+
+    /**
+    * Sets the multiplier determining the importance of the manhattan heuristics
+    * @param {Number} factor
+    **/
+    this.setHeuristicsFactor = function(factor) {
+        heuristicsFactor = factor;
+    };
+
+    /**
+    * Sets the added cost for making a turn
+    * Higer value means less turns
+    * @param {Number} factor
+    **/
+    this.setTurnPenalty = function(penalty) {
+        turnPenalty = penalty;
     };
 
     /**
@@ -517,12 +536,19 @@ EasyStar.js = function() {
             instance.nodeHash[y] = {};
         }
         var simpleDistanceToTarget = getDistance(x, y, instance.endX, instance.endY);
+        var costSoFar = 0;
+        var directionFromParent = 'NONE';
+        var turnPenaltyCost = 0;
         if (parent!==null) {
-            var costSoFar = parent.costSoFar + cost;
+            direction = calculateDirection(x - parent.x, y - parent.y)
+            if (parent.directionFromParent !== directionFromParent) {
+                turnPenaltyCost = turnPenalty;
+            }
+            costSoFar = parent.costSoFar + cost + turnPenaltyCost;
         } else {
             costSoFar = 0;
         }
-        var node = new Node(parent,x,y,costSoFar,simpleDistanceToTarget);
+        var node = new Node(parent,x,y,costSoFar,simpleDistanceToTarget,directionFromParent);
         instance.nodeHash[y][x] = node;
         return node;
     };
@@ -541,7 +567,7 @@ EasyStar.js = function() {
             // Manhattan distance
             var dx = Math.abs(x1 - x2);
             var dy = Math.abs(y1 - y2);
-            return (dx + dy);
+            return heuristicsFactor * (dx + dy);
         }
     };
 }

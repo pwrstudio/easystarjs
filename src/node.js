@@ -5,13 +5,15 @@
 * @param {Number} y The y position on the grid.
 * @param {Number} costSoFar How far this node is in moves*cost from the start.
 * @param {Number} simpleDistanceToTarget Manhatten distance to the end point.
+* @param {String} directionFromParent
 **/
-module.exports = function(parent, x, y, costSoFar, simpleDistanceToTarget) {
+module.exports = function(parent, x, y, costSoFar, simpleDistanceToTarget, directionFromParent) {
     this.parent = parent;
     this.x = x;
     this.y = y;
     this.costSoFar = costSoFar;
     this.simpleDistanceToTarget = simpleDistanceToTarget;
+    this.directionFromParent = directionFromParent;
 
     /**
     * @return {Number} Best guess distance of a cost using this node.

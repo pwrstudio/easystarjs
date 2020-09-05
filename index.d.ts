@@ -168,4 +168,18 @@ export class js {
    * Remove all directional conditions
    */
   removeAllDirectionalConditions(): void
+
+  /**
+  * Sets the multiplier determining the importance of the manhattan heuristics
+  * @param {Number} factor
+  **/
+  setHeuristicsFactor(factor: number): void
+
+  /**
+  * Sets the added cost for making a turn
+  * Higer value means less turns
+  * @param {Number} factor
+  **/
+  setTurnPenalty(factor: number): void
+
 }
